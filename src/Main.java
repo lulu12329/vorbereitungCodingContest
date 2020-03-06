@@ -9,6 +9,15 @@ public class Main {
 	static private int m;	//Anzahl der Autos die heute kommen
 	static private ArrayList<Integer> cars = new ArrayList<Integer>();
 
+	public static void main(String[] args) throws FileNotFoundException {
+		Scanner s = new Scanner(System.in);
+		System.out.print("Bitte Path zum input eingeben: ");
+		String path = s.nextLine();
+
+		readIn(path);
+		System.out.println(countWaiting(cars));
+	}
+
 	private static void readIn(String path) throws FileNotFoundException {
 		File input = new File(path);
 		Scanner r = new Scanner(input);
@@ -33,28 +42,50 @@ public class Main {
 		r.close();
 	}
 
-	public static void main(String[] args) throws FileNotFoundException {
-		Scanner s = new Scanner(System.in);
-		System.out.print("Bitte Path zum input eingeben: ");
-		String path = s.nextLine();
-
-		readIn(path);
-		System.out.println(count(cars));
-	}
-
-	private static int count(ArrayList<Integer> cars){
+	private static String count(ArrayList<Integer> cars){
+		int carsInGarage=0;
 		int maxCars=0;
-		int counter=0;
 		for(Integer i:cars){
 			if(i>0){
-				counter++;
-				if(counter>maxCars){
-					maxCars=counter;
+				carsInGarage++;
+				if(carsInGarage>maxCars){
+					maxCars=carsInGarage;
 				}
 			}else if(i<0){
-				counter--;
+				carsInGarage--;
 			}
 		}
-		return maxCars;
+		String s=maxCars+"";
+		return s;
+	}
+
+	private static String countWaiting(ArrayList<Integer> cars){
+		int carsInGarage=0;
+		int carsWaiting=0;
+		int maxCars=0;
+		int maxWaiting=0;
+		for(Integer i:cars){
+			if(i>0){
+				if(carsInGarage<n){
+					carsInGarage++;
+					if(carsInGarage>maxCars){
+						maxCars=carsInGarage;
+					}
+				}else{
+					carsWaiting++;
+					if(carsWaiting>maxWaiting){
+						maxWaiting=carsWaiting;
+					}
+				}
+			}else if(i<0){
+				carsInGarage--;
+				if(carsWaiting>0){
+					carsWaiting--;
+					carsInGarage++;
+				}
+			}
+		}
+		String s=maxCars+" "+maxWaiting;
+		return s;
 	}
 }
